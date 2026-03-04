@@ -57,7 +57,7 @@ import {
   fetchChokepointStatus,
   fetchCriticalMinerals,
 } from '@/services';
-import { getMarketWatchlistSymbols } from '@/services/market-watchlist';
+import { getMarketWatchlistEntries } from '@/services/market-watchlist';
 import { checkBatchForBreakingAlerts, dispatchOrefBreakingAlert } from '@/services/breaking-news-alerts';
 import { mlWorker } from '@/services/ml-worker';
 import { clusterNewsHybrid } from '@/services/clustering';
@@ -952,15 +952,16 @@ export class DataLoaderManager implements AppModule {
 
   async loadMarkets(): Promise<void> {
     try {
-      const customSymbols = getMarketWatchlistSymbols();
+      const customEntries = getMarketWatchlistEntries();
       const effectiveSymbols = (() => {
-        if (customSymbols.length === 0) return MARKET_SYMBOLS;
+        if (customEntries.length === 0) return MARKET_SYMBOLS;
         const base = MARKET_SYMBOLS.slice();
         const seen = new Set(base.map((s) => s.symbol));
-        for (const sym of customSymbols) {
+        for (const entry of customEntries) {
+          const sym = entry.symbol;
           if (!sym || seen.has(sym)) continue;
           seen.add(sym);
-          base.push({ symbol: sym, name: sym, display: sym });
+          base.push({ symbol: sym, name: entry.name || sym, display: entry.display || sym });
           if (base.length >= 50) break;
         }
         return base;
@@ -971,7 +972,7 @@ export class DataLoaderManager implements AppModule {
       const hydratedMarkets = getHydratedData('marketQuotes') as ListMarketQuotesResponse | undefined;
       let stocksResult: Awaited<ReturnType<typeof fetchMultipleStocks>>;
 
-      if (customSymbols.length === 0 && hydratedMarkets?.quotes?.length) {
+      if (customEntries.length === 0 && hydratedMarkets?.quotes?.length) {
         const symbolMetaMap = new Map(effectiveSymbols.map((s) => [s.symbol, s]));
         const data = hydratedMarkets.quotes.map((q) => ({
           symbol: q.symbol,

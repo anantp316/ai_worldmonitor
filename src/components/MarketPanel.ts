@@ -4,12 +4,11 @@ import type { MarketData, CryptoData } from '@/types';
 import { formatPrice, formatChange, getChangeClass, getHeatmapClass } from '@/utils';
 import { escapeHtml } from '@/utils/sanitize';
 import { miniSparkline } from '@/utils/sparkline';
-import { MARKET_SYMBOLS } from '@/config';
 import {
-  getMarketWatchlistSymbols,
-  parseMarketSymbolsInput,
+  getMarketWatchlistEntries,
+  parseMarketWatchlistInput,
   resetMarketWatchlist,
-  setMarketWatchlistSymbols,
+  setMarketWatchlistEntries,
 } from '@/services/market-watchlist';
 
 export class MarketPanel extends Panel {
@@ -36,9 +35,10 @@ export class MarketPanel extends Panel {
   private openWatchlistModal(): void {
     if (this.overlay) return;
 
-    const current = getMarketWatchlistSymbols();
-    const defaultText = MARKET_SYMBOLS.map((s) => s.symbol).join(', ');
-    const currentText = current.length ? current.join(', ') : defaultText;
+    const current = getMarketWatchlistEntries();
+    const currentText = current.length
+      ? current.map((e) => (e.name ? `${e.symbol}|${e.name}` : e.symbol)).join('\n')
+      : '';
 
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay active';
@@ -58,7 +58,8 @@ export class MarketPanel extends Panel {
       </div>
       <div style="padding:14px 16px 16px 16px">
         <div style="color:var(--text-dim);font-size:12px;line-height:1.4;margin-bottom:10px">
-          Add tickers (comma or newline separated). Example: AAPL, MSFT, TSLA, ^GSPC
+          Add extra tickers (comma or newline separated). Friendly labels supported: SYMBOL|Label.
+          Example: TSLA|Tesla, AAPL|Apple, ^GSPC|S&P 500
           <br/>
           Tip: keep it under ~30 unless you enjoy scrolling.
         </div>
@@ -86,14 +87,14 @@ export class MarketPanel extends Panel {
     modal.querySelector<HTMLButtonElement>('#wmMarketCancelBtn')?.addEventListener('click', () => this.closeWatchlistModal());
     modal.querySelector<HTMLButtonElement>('#wmMarketResetBtn')?.addEventListener('click', () => {
       resetMarketWatchlist();
-      if (input) input.value = defaultText;
+      if (input) input.value = ''; // defaults are always included automatically
       this.closeWatchlistModal();
     });
     modal.querySelector<HTMLButtonElement>('#wmMarketSaveBtn')?.addEventListener('click', () => {
       const raw = input?.value || '';
-      const parsed = parseMarketSymbolsInput(raw);
+      const parsed = parseMarketWatchlistInput(raw);
       if (parsed.length === 0) resetMarketWatchlist();
-      else setMarketWatchlistSymbols(parsed);
+      else setMarketWatchlistEntries(parsed);
       this.closeWatchlistModal();
     });
   }
