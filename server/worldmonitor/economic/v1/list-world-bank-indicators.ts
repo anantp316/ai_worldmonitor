@@ -14,6 +14,7 @@ import { CHROME_UA } from '../../../_shared/constants';
 import { cachedFetchJson } from '../../../_shared/redis';
 
 const REDIS_CACHE_KEY = 'economic:worldbank:v1';
+const BOOTSTRAP_KEY = 'economic:worldbank-techreadiness:v1';
 const REDIS_CACHE_TTL = 86400; // 24 hr — annual data
 
 const TECH_COUNTRIES = [
