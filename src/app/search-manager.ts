@@ -50,7 +50,7 @@ export class SearchManager implements AppModule {
   }
 
   private setupSearchModal(): void {
-    const searchOptions = SITE_VARIANT === 'tech'
+    const searchOptions = (SITE_VARIANT === 'tech' || SITE_VARIANT === 'ai')
       ? { placeholder: t('modals.search.placeholderTech') }
       : SITE_VARIANT === 'happy'
         ? { placeholder: 'Search or type a command...' }
@@ -61,7 +61,7 @@ export class SearchManager implements AppModule {
 
     if (SITE_VARIANT === 'happy') {
       // Happy variant: no geopolitical/military/infrastructure sources
-    } else if (SITE_VARIANT === 'tech') {
+    } else if (SITE_VARIANT === 'tech' || SITE_VARIANT === 'ai') {
       this.ctx.searchModal.registerSource('techcompany', TECH_COMPANIES.map(c => ({
         id: c.id,
         title: c.name,

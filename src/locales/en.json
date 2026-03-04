@@ -129,8 +129,8 @@
     }
   },
   "header": {
-    "world": "WORLD",
-    "tech": "TECH",
+    "world": "AI",
+    "tech": "AI",
     "live": "LIVE",
     "search": "Search",
     "settings": "SETTINGS",
@@ -157,7 +157,7 @@
     "sourceRegionLatAm": "Latin America",
     "sourceRegionAsiaPacific": "Asia-Pacific",
     "sourceRegionEurope": "Europe",
-    "sourceRegionTopical": "Topical",
+    "sourceRegionTopical": "AI Research",
     "sourceRegionIntel": "Intelligence",
     "sourceRegionTechNews": "Tech News",
     "sourceRegionAiMl": "AI & ML",
@@ -198,11 +198,11 @@
   "panels": {
     "liveNews": "Live News",
     "markets": "Markets",
-    "map": "Global Situation",
+    "map": "AI Global Command",
     "techMap": "Global Tech",
     "techHubs": "Hot Tech Hubs",
     "status": "System Status",
-    "insights": "AI Insights",
+    "insights": "AI Intelligence Brief",
     "strategicPosture": "AI Strategic Posture",
     "cii": "Country Instability",
     "strategicRisk": "Strategic Risk Overview",
@@ -400,7 +400,8 @@
         "startup": "Startup",
         "techevent": "Tech Event",
         "techhq": "Tech HQ",
-        "accelerator": "Accelerator"
+        "accelerator": "Accelerator",
+        "ailab": "AI Lab"
       }
     },
     "signal": {
@@ -988,6 +989,7 @@
         "internetOutages": "Internet Outages",
         "cyberThreats": "Cyber Threats",
         "techEvents": "Tech Events",
+        "aiResearchLabs": "AI Research Labs",
         "naturalEvents": "Natural Events",
         "fires": "Fires",
         "intelHotspots": "Intel Hotspots",
@@ -1985,6 +1987,17 @@
       "eventsCount": "{{count}} EVENTS",
       "upcomingWithin2Weeks": "{{count}} upcoming within 2 weeks",
       "sampled": "Showing a sampled list of {{count}} events."
+    },
+    "aiResearchLab": {
+      "loadingResearch": "Loading recent research...",
+      "noRecentResearch": "No recent research papers found",
+      "viewMoreArxiv": "View more on arXiv",
+      "recentResearch": "RECENT RESEARCH",
+      "focusAreas": "FOCUS AREAS",
+      "notableWork": "NOTABLE WORK",
+      "publications": "PUBLICATIONS",
+      "founded": "FOUNDED",
+      "faculty": "FACULTY"
     },
     "militaryFlight": {
       "types": {

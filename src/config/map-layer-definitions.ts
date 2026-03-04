@@ -1,7 +1,7 @@
 import type { MapLayers } from '@/types';
 
 export type MapRenderer = 'flat' | 'globe';
-export type MapVariant = 'full' | 'tech' | 'finance' | 'happy';
+export type MapVariant = 'full' | 'tech' | 'finance' | 'happy' | 'ai';
 
 export interface LayerDefinition {
   key: keyof MapLayers;
@@ -55,6 +55,7 @@ export const LAYER_REGISTRY: Record<keyof MapLayers, LayerDefinition> = {
   accelerators:             def('accelerators',             '&#9889;',   'accelerators',             'Accelerators'),
   cloudRegions:             def('cloudRegions',             '&#9729;',   'cloudRegions',             'Cloud Regions'),
   techEvents:               def('techEvents',               '&#128197;', 'techEvents',               'Tech Events'),
+  aiResearchLabs:           def('aiResearchLabs',           '&#128300;', 'aiResearchLabs',           'AI Research Labs'),
   stockExchanges:           def('stockExchanges',           '&#127963;', 'stockExchanges',           'Stock Exchanges'),
   financialCenters:         def('financialCenters',         '&#128176;', 'financialCenters',         'Financial Centers'),
   centralBanks:             def('centralBanks',             '&#127974;', 'centralBanks',             'Central Banks'),
@@ -92,6 +93,11 @@ const VARIANT_LAYER_ORDER: Record<MapVariant, Array<keyof MapLayers>> = {
   happy: [
     'positiveEvents', 'kindness', 'happiness',
     'speciesRecovery', 'renewableInstallations',
+  ],
+  ai: [
+    'startupHubs', 'techHQs', 'aiResearchLabs', 'cloudRegions',
+    'datacenters', 'cables', 'outages', 'cyberThreats',
+    'techEvents', 'dayNight',
   ],
 };
 

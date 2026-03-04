@@ -11,7 +11,27 @@ export interface VariantMeta {
   features: string[];
 }
 
-export const VARIANT_META: { full: VariantMeta; [k: string]: VariantMeta } = {
+export const VARIANT_META: { ai: VariantMeta; full: VariantMeta; [k: string]: VariantMeta } = {
+  ai: {
+    title: 'AI Monitor - Real-Time AI & GenAI Industry Dashboard',
+    description: 'Real-time AI industry dashboard tracking developments in AI, GenAI, and Agentic AI across medical, research, and defense sectors.',
+    keywords: 'AI monitor, GenAI tracking, Agentic AI, AI research, medical AI, AI in warfare, AI breakthroughs, AI labs, tech dashboard',
+    url: 'https://ai.worldmonitor.app/',
+    siteName: 'AI Monitor',
+    shortName: 'AIMonitor',
+    subject: 'AI, GenAI, and Agentic AI Intelligence',
+    classification: 'AI Dashboard, GenAI Tracker, AI Intelligence',
+    categories: ['news', 'business', 'research'],
+    features: [
+      'AI news aggregation',
+      'GenAI development tracking',
+      'Agentic AI monitoring',
+      'AI research paper feed',
+      'Medical AI breakthroughs',
+      'AI in defense & warfare',
+      'AI lab mapping',
+    ],
+  },
   full: {
     title: 'World Monitor - Real-Time Global Intelligence Dashboard',
     description: 'Real-time global intelligence dashboard with live news, markets, military tracking, infrastructure monitoring, and geopolitical data. OSINT in one view.',

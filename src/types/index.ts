@@ -547,6 +547,7 @@ export interface MapLayers {
   accelerators: boolean;
   techHQs: boolean;
   techEvents: boolean;
+  aiResearchLabs: boolean;
   // Finance variant layers
   stockExchanges: boolean;
   financialCenters: boolean;

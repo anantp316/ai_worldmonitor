@@ -7,7 +7,7 @@ const BOOTSTRAP_CACHE_KEYS = {
   earthquakes:      'seismology:earthquakes:v1',
   outages:          'infra:outages:v1',
   serviceStatuses:  'infra:service-statuses:v1',
-  marketQuotes:     'market:stocks-bootstrap:v1',
+  marketQuotes:     'market:quotes-bootstrap:v1',
   commodityQuotes:  'market:commodities-bootstrap:v1',
   sectors:          'market:sectors:v1',
   etfFlows:         'market:etf-flows:v1',

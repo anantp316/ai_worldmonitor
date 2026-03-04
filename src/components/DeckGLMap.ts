@@ -31,6 +31,7 @@ import type {
   MapTechHQCluster,
   MapTechEventCluster,
   MapDatacenterCluster,
+  AIResearchLab,
   CyberThreat,
   CableHealthRecord,
   MilitaryBaseEnriched,
@@ -63,6 +64,7 @@ import {
   ECONOMIC_CENTERS,
   AI_DATA_CENTERS,
   SITE_VARIANT,
+  AI_RESEARCH_LABS,
   STARTUP_HUBS,
   ACCELERATORS,
   TECH_HQS,
@@ -316,6 +318,7 @@ export class DeckGLMap {
   private ucdpEvents: UcdpGeoEvent[] = [];
   private displacementFlows: DisplacementFlow[] = [];
   private gpsJammingHexes: GpsJamHex[] = [];
+  private aiResearchLabs: AIResearchLab[] = AI_RESEARCH_LABS;
   private climateAnomalies: ClimateAnomaly[] = [];
   private tradeRouteSegments: TradeRouteSegment[] = resolveTradeRouteSegments();
   private positiveEvents: PositiveGeoEvent[] = [];
@@ -1275,7 +1278,7 @@ export class DeckGLMap {
     }
 
     // Tech variant layers (Supercluster-based deck.gl layers for HQs and events)
-    if (SITE_VARIANT === 'tech') {
+    if (SITE_VARIANT === 'tech' || SITE_VARIANT === 'ai') {
       if (mapLayers.startupHubs) {
         layers.push(this.createStartupHubsLayer());
       }
@@ -1290,6 +1293,9 @@ export class DeckGLMap {
       }
       if (mapLayers.techEvents && this.techEvents.length > 0) {
         layers.push(...this.createTechEventClusterLayers());
+      }
+      if (mapLayers.aiResearchLabs) {
+        layers.push(this.createAIResearchLabsLayer());
       }
     }
 
@@ -2147,6 +2153,22 @@ export class DeckGLMap {
       radiusMinPixels: 4,
       radiusMaxPixels: 12,
       pickable: true,
+    });
+  }
+
+  private createAIResearchLabsLayer(): ScatterplotLayer {
+    return new ScatterplotLayer({
+      id: 'ai-research-labs-layer',
+      data: this.aiResearchLabs,
+      getPosition: (d) => [d.lon, d.lat],
+      getRadius: 10000,
+      getFillColor: [255, 100, 255, 200] as [number, number, number, number],
+      radiusMinPixels: 5,
+      radiusMaxPixels: 12,
+      pickable: true,
+      stroked: true,
+      getLineColor: [255, 255, 255, 150] as [number, number, number, number],
+      lineWidthMinPixels: 1,
     });
   }
 
@@ -3131,6 +3153,7 @@ export class DeckGLMap {
       'accelerators-layer': 'accelerator',
       'cloud-regions-layer': 'cloudRegion',
       'tech-events-layer': 'techEvent',
+      'ai-research-labs-layer': 'aiResearchLab',
       'apt-groups-layer': 'apt',
       'minerals-layer': 'mineral',
       'ais-disruptions-layer': 'ais',
@@ -3506,7 +3529,15 @@ export class DeckGLMap {
     };
 
     const isLight = getCurrentTheme() === 'light';
-    const legendItems = SITE_VARIANT === 'tech'
+    const legendItems = SITE_VARIANT === 'ai'
+      ? [
+        { shape: shapes.circle(isLight ? 'rgb(22, 163, 74)' : 'rgb(0, 255, 150)'), label: t('components.deckgl.legend.startupHub') },
+        { shape: shapes.circle('rgb(100, 200, 255)'), label: t('components.deckgl.legend.techHQ') },
+        { shape: shapes.circle('rgb(255, 100, 255)'), label: 'AI Research Lab' },
+        { shape: shapes.circle('rgb(150, 100, 255)'), label: t('components.deckgl.legend.cloudRegion') },
+        { shape: shapes.square('rgb(136, 68, 255)'), label: t('components.deckgl.legend.datacenter') },
+      ]
+      : SITE_VARIANT === 'tech'
       ? [
         { shape: shapes.circle(isLight ? 'rgb(22, 163, 74)' : 'rgb(0, 255, 150)'), label: t('components.deckgl.legend.startupHub') },
         { shape: shapes.circle('rgb(100, 200, 255)'), label: t('components.deckgl.legend.techHQ') },

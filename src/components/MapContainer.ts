@@ -676,6 +676,15 @@ export class MapContainer {
     }
   }
 
+  /** Project lat/lon to screen coordinates. Primarily for E2E testing. */
+  public project(lat: number, lon: number): { x: number; y: number } | null {
+    if (this.useDeckGL && (this.deckGLMap as any).maplibreMap) {
+      const point = (this.deckGLMap as any).maplibreMap.project([lon, lat]);
+      return { x: point.x, y: point.y };
+    }
+    return null;
+  }
+
   public setRenderPaused(paused: boolean): void {
     if (this.useDeckGL) {
       this.deckGLMap?.setRenderPaused(paused);

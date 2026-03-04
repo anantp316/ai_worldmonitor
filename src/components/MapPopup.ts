@@ -1,4 +1,4 @@
-import type { ConflictZone, Hotspot, NewsItem, MilitaryBase, StrategicWaterway, APTGroup, NuclearFacility, EconomicCenter, GammaIrradiator, Pipeline, UnderseaCable, CableAdvisory, RepairShip, InternetOutage, AIDataCenter, AisDisruptionEvent, SocialUnrestEvent, MilitaryFlight, MilitaryVessel, MilitaryFlightCluster, MilitaryVesselCluster, NaturalEvent, Port, Spaceport, CriticalMineralProject, CyberThreat, GeopoliticalBoundary } from '@/types';
+import type { ConflictZone, Hotspot, NewsItem, MilitaryBase, StrategicWaterway, APTGroup, NuclearFacility, EconomicCenter, GammaIrradiator, Pipeline, UnderseaCable, CableAdvisory, RepairShip, InternetOutage, AIDataCenter, AisDisruptionEvent, SocialUnrestEvent, MilitaryFlight, MilitaryVessel, MilitaryFlightCluster, MilitaryVesselCluster, NaturalEvent, Port, Spaceport, CriticalMineralProject, CyberThreat, GeopoliticalBoundary, AIResearchLab } from '@/types';
 import type { AirportDelayAlert } from '@/services/aviation';
 import type { Earthquake } from '@/services/earthquakes';
 import type { WeatherAlert } from '@/services/weather';
@@ -14,7 +14,7 @@ import { getNaturalEventIcon } from '@/services/eonet';
 import { getHotspotEscalation, getEscalationChange24h } from '@/services/hotspot-escalation';
 import { getCableHealthRecord } from '@/services/cable-health';
 
-export type PopupType = 'conflict' | 'hotspot' | 'earthquake' | 'weather' | 'base' | 'waterway' | 'apt' | 'cyberThreat' | 'nuclear' | 'economic' | 'irradiator' | 'pipeline' | 'cable' | 'cable-advisory' | 'repair-ship' | 'outage' | 'datacenter' | 'datacenterCluster' | 'ais' | 'protest' | 'protestCluster' | 'flight' | 'militaryFlight' | 'militaryVessel' | 'militaryFlightCluster' | 'militaryVesselCluster' | 'natEvent' | 'port' | 'spaceport' | 'mineral' | 'startupHub' | 'cloudRegion' | 'techHQ' | 'accelerator' | 'techEvent' | 'techHQCluster' | 'techEventCluster' | 'techActivity' | 'geoActivity' | 'stockExchange' | 'financialCenter' | 'centralBank' | 'commodityHub' | 'iranEvent' | 'gpsJamming' | 'geopoliticalBoundary';
+export type PopupType = 'conflict' | 'hotspot' | 'earthquake' | 'weather' | 'base' | 'waterway' | 'apt' | 'cyberThreat' | 'nuclear' | 'economic' | 'irradiator' | 'pipeline' | 'cable' | 'cable-advisory' | 'repair-ship' | 'outage' | 'datacenter' | 'datacenterCluster' | 'ais' | 'protest' | 'protestCluster' | 'flight' | 'militaryFlight' | 'militaryVessel' | 'militaryFlightCluster' | 'militaryVesselCluster' | 'natEvent' | 'port' | 'spaceport' | 'mineral' | 'startupHub' | 'cloudRegion' | 'techHQ' | 'accelerator' | 'techEvent' | 'techHQCluster' | 'techEventCluster' | 'techActivity' | 'geoActivity' | 'stockExchange' | 'financialCenter' | 'centralBank' | 'commodityHub' | 'iranEvent' | 'gpsJamming' | 'geopoliticalBoundary' | 'aiResearchLab';
 
 interface TechEventPopupData {
   id: string;
@@ -144,7 +144,7 @@ interface DatacenterClusterData {
 
 interface PopupData {
   type: PopupType;
-  data: ConflictZone | Hotspot | Earthquake | WeatherAlert | MilitaryBase | StrategicWaterway | APTGroup | CyberThreat | NuclearFacility | EconomicCenter | GammaIrradiator | Pipeline | UnderseaCable | CableAdvisory | RepairShip | InternetOutage | AIDataCenter | AisDisruptionEvent | SocialUnrestEvent | AirportDelayAlert | MilitaryFlight | MilitaryVessel | MilitaryFlightCluster | MilitaryVesselCluster | NaturalEvent | Port | Spaceport | CriticalMineralProject | StartupHub | CloudRegion | TechHQ | Accelerator | TechEventPopupData | TechHQClusterData | TechEventClusterData | ProtestClusterData | DatacenterClusterData | TechHubActivity | GeoHubActivity | StockExchangePopupData | FinancialCenterPopupData | CentralBankPopupData | CommodityHubPopupData | IranEventPopupData | GpsJammingPopupData | GeopoliticalBoundary;
+  data: ConflictZone | Hotspot | Earthquake | WeatherAlert | MilitaryBase | StrategicWaterway | APTGroup | CyberThreat | NuclearFacility | EconomicCenter | GammaIrradiator | Pipeline | UnderseaCable | CableAdvisory | RepairShip | InternetOutage | AIDataCenter | AisDisruptionEvent | SocialUnrestEvent | AirportDelayAlert | MilitaryFlight | MilitaryVessel | MilitaryFlightCluster | MilitaryVesselCluster | NaturalEvent | Port | Spaceport | CriticalMineralProject | StartupHub | CloudRegion | TechHQ | Accelerator | TechEventPopupData | TechHQClusterData | TechEventClusterData | ProtestClusterData | DatacenterClusterData | TechHubActivity | GeoHubActivity | StockExchangePopupData | FinancialCenterPopupData | CentralBankPopupData | CommodityHubPopupData | IranEventPopupData | GpsJammingPopupData | GeopoliticalBoundary | AIResearchLab;
   relatedNews?: NewsItem[];
   x: number;
   y: number;
@@ -458,6 +458,8 @@ export class MapPopup {
         return this.renderIranEventPopup(data.data as IranEventPopupData);
       case 'gpsJamming':
         return this.renderGpsJammingPopup(data.data as GpsJammingPopupData);
+      case 'aiResearchLab':
+        return this.renderAIResearchLabPopup(data.data as AIResearchLab);
       default:
         return '';
     }
@@ -2687,6 +2689,83 @@ export class MapPopup {
         </div>
         ${relatedHtml}
         ${safeUrl ? `<a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer nofollow" class="popup-link">${t('popups.source')} →</a>` : ''}
+      </div>
+    `;
+  }
+
+  private renderAIResearchLabPopup(lab: AIResearchLab): string {
+    const typeLabel = escapeHtml(lab.type.toUpperCase());
+    const focusAreas = lab.focusAreas?.slice(0, 5) || [];
+    const notableWork = lab.notableWork?.slice(0, 3) || [];
+
+    // Dynamically loading research content
+    setTimeout(() => {
+      const container = document.querySelector(`.ai-lab-research[data-lab-id="${lab.id}"]`);
+      if (container) {
+        import('@/services/research').then(svc => {
+          svc.fetchArxivPapers('cs.AI', lab.name, 5).then(papers => {
+            if (papers.length === 0) {
+              container.innerHTML = `<div class="popup-description">${t('popups.noRecentResearch')}</div>`;
+              return;
+            }
+            container.innerHTML = `
+              <ul class="cluster-list">
+                ${papers.map(p => {
+                  const url = p.url ? sanitizeUrl(p.url) : '#';
+                  const title = p.title ? escapeHtml(p.title) : 'Untitled Paper';
+                  const year = p.publishedAt ? new Date(p.publishedAt).getFullYear() : 'N/A';
+                  return `
+                    <li class="cluster-item">
+                      <a href="${url}" target="_blank" class="research-link">
+                        📄 ${title}
+                        <span class="research-meta">${year}</span>
+                      </a>
+                    </li>
+                  `;
+                }).join('')}
+              </ul>
+            <a href="https://arxiv.org/search/?query=${encodeURIComponent(lab.name || '')}&searchtype=all" target="_blank" class="popup-link">${t('popups.aiResearchLab.viewMoreArxiv')} →</a>
+            `;
+          });
+        });
+      }
+    }, 100);
+
+    return `
+      <div class="popup-header ai-lab">
+        <span class="popup-title">🔬 ${escapeHtml(lab.name.toUpperCase())}</span>
+        <span class="popup-badge elevated">${typeLabel}</span>
+        <button class="popup-close" aria-label="Close">×</button>
+      </div>
+      <div class="popup-body">
+        <div class="popup-subtitle">${escapeHtml(lab.city || '')}, ${escapeHtml(lab.country)}</div>
+        <div class="popup-stats">
+          ${lab.foundedYear ? `<div class="popup-stat"><span class="stat-label">${t('popups.aiResearchLab.founded')}</span><span class="stat-value">${lab.foundedYear}</span></div>` : ''}
+          ${lab.publications ? `<div class="popup-stat"><span class="stat-label">${t('popups.aiResearchLab.publications')}</span><span class="stat-value">${lab.publications}+</span></div>` : ''}
+          ${lab.faculty ? `<div class="popup-stat"><span class="stat-label">${t('popups.aiResearchLab.faculty')}</span><span class="stat-value">${lab.faculty}</span></div>` : ''}
+        </div>
+        ${focusAreas.length > 0 ? `
+          <div class="popup-section">
+            <span class="section-label">${t('popups.aiResearchLab.focusAreas')}</span>
+            <div class="popup-tags">
+              ${focusAreas.map(f => `<span class="popup-tag">${escapeHtml(f)}</span>`).join('')}
+            </div>
+          </div>
+        ` : ''}
+        ${notableWork.length > 0 ? `
+          <div class="popup-section">
+            <span class="section-label">${t('popups.aiResearchLab.notableWork')}</span>
+            <ul class="popup-list">
+              ${notableWork.map(w => `<li>${escapeHtml(w)}</li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
+        <div class="popup-section">
+          <span class="section-label">${t('popups.aiResearchLab.recentResearch')}</span>
+          <div class="ai-lab-research" data-lab-id="${escapeHtml(lab.id)}">
+            <div class="hotspot-gdelt-loading">${t('popups.aiResearchLab.loadingResearch')}</div>
+          </div>
+        </div>
       </div>
     `;
   }

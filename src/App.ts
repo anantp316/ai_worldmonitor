@@ -283,6 +283,7 @@ export class App {
       PANEL_ORDER_KEY,
       PANEL_SPANS_KEY,
     };
+    (window as any).worldMonitorContext = this.state;
 
     // Instantiate modules (callbacks wired after all modules exist)
     this.refreshScheduler = new RefreshScheduler(this.state);

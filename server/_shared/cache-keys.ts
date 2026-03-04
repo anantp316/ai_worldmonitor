@@ -6,6 +6,8 @@ export const BOOTSTRAP_CACHE_KEYS: Record<string, string> = {
   earthquakes:      'seismology:earthquakes:v1',
   outages:          'infra:outages:v1',
   serviceStatuses:  'infra:service-statuses:v1',
+  marketQuotes:     'market:quotes-bootstrap:v1',
+  commodityQuotes:  'market:commodities-bootstrap:v1',
   sectors:          'market:sectors:v1',
   etfFlows:         'market:etf-flows:v1',
   macroSignals:     'economic:macro-signals:v1',
@@ -18,13 +20,17 @@ export const BOOTSTRAP_CACHE_KEYS: Record<string, string> = {
   giving:           'giving:summary:v1',
   climateAnomalies: 'climate:anomalies:v1',
   wildfires:        'wildfire:fires:v1',
+  cyberThreats:     'cyber:threats-bootstrap:v2',
+  techReadiness:    'economic:worldbank-techreadiness:v1',
+  positiveGeoEvents: 'positive-events:geo-bootstrap:v1',
 };
 
 export const BOOTSTRAP_TIERS: Record<string, 'slow' | 'fast'> = {
   bisPolicy: 'slow', bisExchange: 'slow', bisCredit: 'slow',
   minerals: 'slow', giving: 'slow', sectors: 'slow',
   etfFlows: 'slow', shippingRates: 'slow', wildfires: 'slow',
-  climateAnomalies: 'slow',
+  climateAnomalies: 'slow', cyberThreats: 'slow', techReadiness: 'slow',
   earthquakes: 'fast', outages: 'fast', serviceStatuses: 'fast',
   macroSignals: 'fast', chokepoints: 'fast',
+  marketQuotes: 'fast', commodityQuotes: 'fast', positiveGeoEvents: 'fast',
 };

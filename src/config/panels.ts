@@ -83,6 +83,7 @@ const FULL_MAP_LAYERS: MapLayers = {
   spaceports: false,
   minerals: false,
   fires: false,
+  aiResearchLabs: false,
   // Data source layers
   ucdpEvents: false,
   displacement: false,
@@ -135,6 +136,7 @@ const FULL_MOBILE_MAP_LAYERS: MapLayers = {
   spaceports: false,
   minerals: false,
   fires: false,
+  aiResearchLabs: false,
   // Data source layers
   ucdpEvents: false,
   displacement: false,
@@ -227,6 +229,7 @@ const TECH_MAP_LAYERS: MapLayers = {
   spaceports: false,
   minerals: false,
   fires: false,
+  aiResearchLabs: false,
   // Data source layers
   ucdpEvents: false,
   displacement: false,
@@ -279,6 +282,7 @@ const TECH_MOBILE_MAP_LAYERS: MapLayers = {
   spaceports: false,
   minerals: false,
   fires: false,
+  aiResearchLabs: false,
   // Data source layers
   ucdpEvents: false,
   displacement: false,
@@ -370,6 +374,7 @@ const FINANCE_MAP_LAYERS: MapLayers = {
   spaceports: false,
   minerals: false,
   fires: false,
+  aiResearchLabs: false,
   // Data source layers
   ucdpEvents: false,
   displacement: false,
@@ -422,6 +427,7 @@ const FINANCE_MOBILE_MAP_LAYERS: MapLayers = {
   spaceports: false,
   minerals: false,
   fires: false,
+  aiResearchLabs: false,
   // Data source layers
   ucdpEvents: false,
   displacement: false,
@@ -447,6 +453,82 @@ const FINANCE_MOBILE_MAP_LAYERS: MapLayers = {
   tradeRoutes: false,
   iranAttacks: false,
   dayNight: false,
+};
+
+// ============================================
+// AI VARIANT (AI Command Center)
+// ============================================
+const AI_PANELS: Record<string, PanelConfig> = {
+  map: { name: 'AI Global Command', enabled: true, priority: 1 },
+  'live-news': { name: 'AI Breaking', enabled: true, priority: 1 },
+  insights: { name: 'AI Intelligence Brief', enabled: true, priority: 1 },
+  ai_general: { name: 'General AI', enabled: true, priority: 1 },
+  genai: { name: 'GenAI & LLMs', enabled: true, priority: 1 },
+  agentic: { name: 'Agentic AI', enabled: true, priority: 1 },
+  ai_medical: { name: 'Medical AI', enabled: true, priority: 1 },
+  ai_research: { name: 'AI Research', enabled: true, priority: 1 },
+  ai_war: { name: 'AI in Defense', enabled: true, priority: 1 },
+  podcasts_tutorials: { name: 'Podcasts & Tutorials', enabled: true, priority: 1 },
+  regulation: { name: 'AI Regulation', enabled: true, priority: 2 },
+  'service-status': { name: 'AI Services Status', enabled: true, priority: 2 },
+  monitors: { name: 'My AI Monitors', enabled: true, priority: 2 },
+  'world-clock': { name: 'World Clock', enabled: true, priority: 2 },
+};
+
+const AI_MAP_LAYERS: MapLayers = {
+  iranAttacks: false,
+  gpsJamming: false,
+  geopoliticalBoundaries: false,
+  conflicts: false,
+  bases: false,
+  cables: true,
+  pipelines: false,
+  hotspots: false,
+  ais: false,
+  nuclear: false,
+  irradiators: false,
+  sanctions: false,
+  weather: false,
+  economic: false,
+  waterways: false,
+  outages: true,
+  cyberThreats: true,
+  datacenters: true,
+  protests: false,
+  flights: false,
+  military: false,
+  natural: false,
+  spaceports: false,
+  minerals: false,
+  fires: false,
+  ucdpEvents: false,
+  displacement: false,
+  climate: false,
+  startupHubs: true,
+  cloudRegions: true,
+  accelerators: false,
+  techHQs: true,
+  techEvents: true,
+  aiResearchLabs: true,
+  stockExchanges: false,
+  financialCenters: false,
+  centralBanks: false,
+  commodityHubs: false,
+  gulfInvestments: false,
+  positiveEvents: false,
+  kindness: false,
+  happiness: false,
+  speciesRecovery: false,
+  renewableInstallations: false,
+  tradeRoutes: false,
+  dayNight: false,
+};
+
+const AI_MOBILE_MAP_LAYERS: MapLayers = {
+  ...AI_MAP_LAYERS,
+  cables: false,
+  cloudRegions: false,
+  techHQs: false,
 };
 
 // ============================================
@@ -490,6 +572,7 @@ const HAPPY_MAP_LAYERS: MapLayers = {
   spaceports: false,
   minerals: false,
   fires: false,
+  aiResearchLabs: false,
   // Data source layers
   ucdpEvents: false,
   displacement: false,
@@ -542,6 +625,7 @@ const HAPPY_MOBILE_MAP_LAYERS: MapLayers = {
   spaceports: false,
   minerals: false,
   fires: false,
+  aiResearchLabs: false,
   // Data source layers
   ucdpEvents: false,
   displacement: false,
@@ -572,9 +656,26 @@ const HAPPY_MOBILE_MAP_LAYERS: MapLayers = {
 // ============================================
 // VARIANT-AWARE EXPORTS
 // ============================================
-export const DEFAULT_PANELS = SITE_VARIANT === 'happy' ? HAPPY_PANELS : SITE_VARIANT === 'tech' ? TECH_PANELS : SITE_VARIANT === 'finance' ? FINANCE_PANELS : FULL_PANELS;
-export const DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy' ? HAPPY_MAP_LAYERS : SITE_VARIANT === 'tech' ? TECH_MAP_LAYERS : SITE_VARIANT === 'finance' ? FINANCE_MAP_LAYERS : FULL_MAP_LAYERS;
-export const MOBILE_DEFAULT_MAP_LAYERS = SITE_VARIANT === 'happy' ? HAPPY_MOBILE_MAP_LAYERS : SITE_VARIANT === 'tech' ? TECH_MOBILE_MAP_LAYERS : SITE_VARIANT === 'finance' ? FINANCE_MOBILE_MAP_LAYERS : FULL_MOBILE_MAP_LAYERS;
+export const DEFAULT_PANELS =
+  SITE_VARIANT === 'ai' ? AI_PANELS :
+  SITE_VARIANT === 'happy' ? HAPPY_PANELS :
+  SITE_VARIANT === 'tech' ? TECH_PANELS :
+  SITE_VARIANT === 'finance' ? FINANCE_PANELS :
+  FULL_PANELS;
+
+export const DEFAULT_MAP_LAYERS =
+  SITE_VARIANT === 'ai' ? AI_MAP_LAYERS :
+  SITE_VARIANT === 'happy' ? HAPPY_MAP_LAYERS :
+  SITE_VARIANT === 'tech' ? TECH_MAP_LAYERS :
+  SITE_VARIANT === 'finance' ? FINANCE_MAP_LAYERS :
+  FULL_MAP_LAYERS;
+
+export const MOBILE_DEFAULT_MAP_LAYERS =
+  SITE_VARIANT === 'ai' ? AI_MOBILE_MAP_LAYERS :
+  SITE_VARIANT === 'happy' ? HAPPY_MOBILE_MAP_LAYERS :
+  SITE_VARIANT === 'tech' ? TECH_MOBILE_MAP_LAYERS :
+  SITE_VARIANT === 'finance' ? FINANCE_MOBILE_MAP_LAYERS :
+  FULL_MOBILE_MAP_LAYERS;
 
 /** Maps map-layer toggle keys to their data-freshness source IDs (single source of truth). */
 export const LAYER_TO_SOURCE: Partial<Record<keyof MapLayers, DataSourceId[]>> = {
@@ -651,6 +752,13 @@ export const PANEL_CATEGORY_MAP: Record<string, { labelKey: string; panelKeys: s
     labelKey: 'header.panelCatMarkets',
     panelKeys: ['markets', 'finance', 'crypto', 'economic', 'polymarket', 'macro-signals', 'etf-flows', 'stablecoins', 'layoffs', 'monitors', 'world-clock'],
     variants: ['tech'],
+  },
+
+  // AI variant
+  aiCommand: {
+    labelKey: 'header.panelCatTechAi',
+    panelKeys: ['ai_general', 'genai', 'agentic', 'ai_medical', 'ai_research', 'ai_war', 'podcasts_tutorials', 'regulation', 'service-status'],
+    variants: ['ai'],
   },
 
   // Finance variant
