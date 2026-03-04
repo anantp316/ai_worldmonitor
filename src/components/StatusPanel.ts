@@ -42,6 +42,15 @@ const WORLD_APIS = new Set([
   'Cyber Threats API', 'BIS', 'WTO', 'SupplyChain'
 ]);
 
+const AI_FEEDS = new Set([
+  'Ai_general', 'Genai', 'Agentic', 'Ai_medical', 'Ai_research',
+  'Ai_war', 'Podcasts_tutorials', 'Regulation', 'Service Status',
+  'Cyber Threats', 'Tech Events'
+]);
+const AI_APIS = new Set([
+  'RSS Proxy', 'Tech Events API', 'Service Status', 'Cyber Threats API'
+]);
+
 import { t } from '../services/i18n';
 import { Panel } from './Panel';
 
@@ -58,8 +67,8 @@ export class StatusPanel extends Panel {
   }
 
   private init(): void {
-    this.allowedFeeds = SITE_VARIANT === 'tech' ? TECH_FEEDS : WORLD_FEEDS;
-    this.allowedApis = SITE_VARIANT === 'tech' ? TECH_APIS : WORLD_APIS;
+    this.allowedFeeds = SITE_VARIANT === 'ai' ? AI_FEEDS : SITE_VARIANT === 'tech' ? TECH_FEEDS : WORLD_FEEDS;
+    this.allowedApis = SITE_VARIANT === 'ai' ? AI_APIS : SITE_VARIANT === 'tech' ? TECH_APIS : WORLD_APIS;
 
     this.element = h('div', { className: 'status-panel-container' });
     this.initDefaultStatuses();

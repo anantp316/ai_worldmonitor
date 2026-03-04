@@ -116,6 +116,7 @@ const layers = {
   accelerators: false,
   techHQs: false,
   techEvents: false,
+  aiResearchLabs: false,
   stockExchanges: false,
   financialCenters: false,
   centralBanks: false,

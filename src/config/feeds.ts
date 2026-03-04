@@ -1062,14 +1062,61 @@ const HAPPY_FEEDS: Record<string, Feed[]> = {
   ],
 };
 
+const AI_FEEDS: Record<string, Feed[]> = {
+  ai_general: [
+    { name: 'AI News', url: rss('https://news.google.com/rss/search?q=artificial+intelligence+news+when:2d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'VentureBeat AI', url: rss('https://venturebeat.com/category/ai/feed/') },
+    { name: 'The Verge AI', url: rss('https://www.theverge.com/rss/ai-artificial-intelligence/index.xml') },
+    { name: 'MIT Tech Review AI', url: rss('https://www.technologyreview.com/topic/artificial-intelligence/feed') },
+    { name: 'Fortune AI', url: rss('https://fortune.com/category/technology/ai/feed/') },
+    { name: 'ZDNet AI', url: rss('https://www.zdnet.com/topic/artificial-intelligence/rss.xml') },
+  ],
+  genai: [
+    { name: 'OpenAI Blog', url: rss('https://openai.com/news/rss.xml') },
+    { name: 'Anthropic News', url: rss('https://news.google.com/rss/search?q=Anthropic+Claude+AI+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Google AI Blog', url: rss('https://blog.google/technology/ai/rss/') },
+    { name: 'Meta AI News', url: rss('https://ai.meta.com/blog/rss/') },
+    { name: 'Hugging Face Blog', url: rss('https://huggingface.co/blog/feed.xml') },
+    { name: 'GenAI Trends', url: rss('https://news.google.com/rss/search?q="generative+AI"+OR+LLM+OR+ChatGPT+OR+Claude+OR+Gemini+when:2d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  agentic: [
+    { name: 'Agentic AI News', url: rss('https://news.google.com/rss/search?q="agentic+AI"+OR+"AI+agents"+OR+"autonomous+agents"+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'AutoGPT/Agents', url: rss('https://news.google.com/rss/search?q="AutoGPT"+OR+"BabyAGI"+OR+"LangChain"+agents+when:7d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  ai_medical: [
+    { name: 'Medical AI News', url: rss('https://news.google.com/rss/search?q="AI+in+medicine"+OR+"healthcare+AI"+OR+"AI+diagnostics"+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Nature Medicine AI', url: rss('https://www.nature.com/nm/rss/current') },
+  ],
+  ai_research: [
+    { name: 'ArXiv AI (cs.AI)', url: rss('https://export.arxiv.org/rss/cs.AI') },
+    { name: 'ArXiv ML (cs.LG)', url: rss('https://export.arxiv.org/rss/cs.LG') },
+    { name: 'MIT Research', url: rss('https://news.mit.edu/rss/research') },
+    { name: 'Stanford HAI', url: rss('https://news.google.com/rss/search?q=site:hai.stanford.edu+when:14d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  ai_war: [
+    { name: 'AI Defense News', url: rss('https://news.google.com/rss/search?q="AI+in+warfare"+OR+"lethal+autonomous+weapons"+OR+"AI+defense"+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'Defense One AI', url: rss('https://www.defenseone.com/rss/all/') },
+    { name: 'Palantir News', url: rss('https://news.google.com/rss/search?q=Palantir+AIP+OR+Anduril+AI+when:14d&hl=en-US&gl=US&ceid=US:en') },
+  ],
+  podcasts_tutorials: [
+    { name: 'Andrej Karpathy', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UC7neMWGV4CF_p3F0LpLj4Sg') },
+    { name: 'AI Explained', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UCN79vJq_VCO_P_O86S3KzSg') },
+    { name: 'Yannic Kilcher', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UCZHm_O-KxNO6BgN6G_fV0Xg') },
+    { name: 'Wes Roth', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UC8wZnXYK_CGKlBcZp-GxYPA') },
+    { name: 'Two Minute Papers', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l4upoX8nvctg') },
+    { name: 'Matt Wolfe', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UC9uUfAsmH6G7sM-7S6vIAtw') },
+    { name: 'The Rundown AI', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UCG5m9G8G3Pz6u7v_1_H9iKg') },
+    { name: 'Matthew Berman', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UC_sfvGnxVb0ZJgndnsh4Irg') },
+  ],
+};
+
 // Variant-aware exports
-export const FEEDS = SITE_VARIANT === 'tech'
-  ? TECH_FEEDS
-  : SITE_VARIANT === 'finance'
-    ? FINANCE_FEEDS
-    : SITE_VARIANT === 'happy'
-      ? HAPPY_FEEDS
-      : FULL_FEEDS;
+export const FEEDS =
+  SITE_VARIANT === 'ai' ? AI_FEEDS :
+  SITE_VARIANT === 'tech' ? TECH_FEEDS :
+  SITE_VARIANT === 'finance' ? FINANCE_FEEDS :
+  SITE_VARIANT === 'happy' ? HAPPY_FEEDS :
+  FULL_FEEDS;
 
 export const SOURCE_REGION_MAP: Record<string, { labelKey: string; feedKeys: string[] }> = {
   // Full (geopolitical) variant regions

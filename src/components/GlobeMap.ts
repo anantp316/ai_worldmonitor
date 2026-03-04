@@ -545,7 +545,9 @@ export class GlobeMap {
     // Navigate to initial view
     this.setView(this.currentView);
 
-    // dayNight toggle excluded by catalog (renderers: ['flat'])
+    // dayNight toggle suppressed on globe
+    this.layers.dayNight = false;
+    this.hideLayerToggle('dayNight');
 
     // Flush any data that arrived before init completed
     this.flushMarkers();
@@ -1387,13 +1389,13 @@ export class GlobeMap {
   // ─── Layer control ────────────────────────────────────────────────────────
 
   public setLayers(layers: MapLayers): void {
-    // dayNight toggle excluded by catalog — harmless if true in memory
-    this.layers = { ...layers };
+    // dayNight toggle suppressed on globe
+    this.layers = { ...layers, dayNight: false };
     this.flushMarkers();
   }
 
   public enableLayer(layer: keyof MapLayers): void {
-    // dayNight toggle excluded by catalog — no guard needed
+    if (layer === 'dayNight') return;
     (this.layers as any)[layer] = true;
     this.flushMarkers();
   }
