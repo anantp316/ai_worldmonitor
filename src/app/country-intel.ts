@@ -430,8 +430,9 @@ export class CountryIntelManager implements AppModule {
     const hasGeoShape = hasCountryGeometry(code) || !!CountryIntelManager.COUNTRY_BOUNDS[code];
     const inCountry = (lat: number, lon: number) => hasGeoShape && this.isInCountry(lat, lon, code);
     const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const isAi = SITE_VARIANT === 'ai';
 
-    if (SITE_VARIANT !== 'ai' && this.ctx.intelligenceCache.protests?.events) {
+    if (!isAi && this.ctx.intelligenceCache.protests?.events) {
       for (const e of this.ctx.intelligenceCache.protests.events) {
         if (e.country?.toLowerCase() === countryLower || inCountry(e.lat, e.lon)) {
           events.push({
@@ -444,7 +445,7 @@ export class CountryIntelManager implements AppModule {
       }
     }
 
-    if (this.ctx.intelligenceCache.earthquakes) {
+    if (!isAi && this.ctx.intelligenceCache.earthquakes) {
       for (const eq of this.ctx.intelligenceCache.earthquakes) {
         if (inCountry(eq.location?.latitude ?? 0, eq.location?.longitude ?? 0) || eq.place?.toLowerCase().includes(countryLower)) {
           events.push({
@@ -457,7 +458,7 @@ export class CountryIntelManager implements AppModule {
       }
     }
 
-    if (SITE_VARIANT !== 'ai' && this.ctx.intelligenceCache.military) {
+    if (!isAi && this.ctx.intelligenceCache.military) {
       for (const f of this.ctx.intelligenceCache.military.flights) {
         if (hasGeoShape ? this.isInCountry(f.lat, f.lon, code) : f.operatorCountry?.toUpperCase() === code) {
           events.push({
@@ -481,7 +482,7 @@ export class CountryIntelManager implements AppModule {
     }
 
     const ciiData = getCountryData(code);
-    if (SITE_VARIANT !== 'ai' && ciiData?.conflicts) {
+    if (!isAi && ciiData?.conflicts) {
       for (const c of ciiData.conflicts) {
         events.push({
           timestamp: new Date(c.time).getTime(),
@@ -492,7 +493,7 @@ export class CountryIntelManager implements AppModule {
       }
     }
 
-    if (SITE_VARIANT !== 'ai') {
+    if (!isAi) {
       for (const e of this.getCountryStrikes(code, hasGeoShape)) {
         const rawTs = Number(e.timestamp) || 0;
         const ts = rawTs < 1e12 ? rawTs * 1000 : rawTs;
@@ -505,7 +506,51 @@ export class CountryIntelManager implements AppModule {
       }
     }
 
-    this.ctx.countryTimeline = new CountryTimeline(mount);
+    if (isAi) {
+      // AI Lanes: News, Outage
+      // 1. News - filter for AI-related keywords to ensure relevance
+      const aiKeywords = ['ai', 'genai', 'llm', 'gpu', 'semiconductor', 'chip', 'agentic', 'machine learning', 'robotics', 'automation', 'research', 'paper', 'arxiv', 'nvidia', 'openai', 'anthropic', 'google ai', 'meta ai', 'mistral'];
+      const searchTerms = CountryIntelManager.getCountrySearchTerms(country, code);
+      const otherCountryTerms = CountryIntelManager.getOtherCountryTerms(code);
+
+      const aiNews = this.ctx.allNews.filter((n) => {
+        const t = n.title.toLowerCase();
+        // Must mention country AND at least one AI keyword
+        if (!searchTerms.some((term) => t.includes(term))) return false;
+        if (!aiKeywords.some((kw) => t.includes(kw))) return false;
+
+        const ourPos = CountryIntelManager.firstMentionPosition(t, searchTerms);
+        const otherPos = CountryIntelManager.firstMentionPosition(t, otherCountryTerms);
+        return ourPos !== Infinity && (otherPos === Infinity || ourPos <= otherPos);
+      });
+
+      for (const n of aiNews) {
+        events.push({
+          timestamp: new Date(n.pubDate).getTime(),
+          lane: 'news',
+          label: n.title,
+          severity: n.isAlert ? 'high' : 'low',
+        });
+      }
+
+      // 2. Outages (relevant for AI infrastructure/compute accessibility)
+      if (this.ctx.intelligenceCache.outages) {
+        for (const o of this.ctx.intelligenceCache.outages) {
+          if (o.country?.toLowerCase() === countryLower || inCountry(o.lat, o.lon)) {
+            events.push({
+              timestamp: new Date(o.pubDate).getTime(),
+              lane: 'outage',
+              label: o.title,
+              severity: o.severity === 'total' ? 'critical' : o.severity === 'major' ? 'high' : 'low',
+            });
+          }
+        }
+      }
+
+      this.ctx.countryTimeline = new CountryTimeline(mount, ['news', 'outage']);
+    } else {
+      this.ctx.countryTimeline = new CountryTimeline(mount);
+    }
     this.ctx.countryTimeline.render(events.filter(e => e.timestamp >= sevenDaysAgo));
   }
 

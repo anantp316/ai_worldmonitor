@@ -3,20 +3,25 @@ import { escapeHtml } from '@/utils/sanitize';
 import { getCSSColor } from '@/utils';
 import { t } from '@/services/i18n';
 
+export type TimelineLane = 'protest' | 'conflict' | 'natural' | 'military' | 'news' | 'infrastructure' | 'outage';
+
 export interface TimelineEvent {
   timestamp: number;
-  lane: 'protest' | 'conflict' | 'natural' | 'military';
+  lane: TimelineLane;
   label: string;
   severity?: 'low' | 'medium' | 'high' | 'critical';
 }
 
-const LANES: TimelineEvent['lane'][] = ['protest', 'conflict', 'natural', 'military'];
+const DEFAULT_LANES: TimelineLane[] = ['protest', 'conflict', 'natural', 'military'];
 
-const LANE_COLORS: Record<TimelineEvent['lane'], string> = {
+const LANE_COLORS: Record<TimelineLane, string> = {
   protest: '#ffaa00',
   conflict: '#ff4444',
   natural: '#b478ff',
   military: '#64b4ff',
+  news: '#00d1ff',
+  infrastructure: '#00ff9d',
+  outage: '#ffb432',
 };
 
 const SEVERITY_RADIUS: Record<string, number> = {
@@ -36,9 +41,11 @@ export class CountryTimeline {
   private tooltip: HTMLDivElement | null = null;
   private resizeObserver: ResizeObserver | null = null;
   private currentEvents: TimelineEvent[] = [];
+  private lanes: TimelineLane[];
 
-  constructor(container: HTMLElement) {
+  constructor(container: HTMLElement, lanes: TimelineLane[] = DEFAULT_LANES) {
     this.container = container;
+    this.lanes = lanes;
     this.createTooltip();
     this.resizeObserver = new ResizeObserver(() => {
       if (this.currentEvents.length > 0) this.render(this.currentEvents);
@@ -106,7 +113,7 @@ export class CountryTimeline {
 
     const yScale = d3
       .scaleBand<string>()
-      .domain(LANES)
+      .domain(this.lanes)
       .range([0, innerH])
       .padding(0.2);
 
@@ -154,24 +161,17 @@ export class CountryTimeline {
     xAxisG.selectAll('line').attr('stroke', getCSSColor('--border'));
     xAxisG.select('.domain').attr('stroke', getCSSColor('--border'));
 
-    const laneLabels: Record<string, string> = {
-      protest: 'Protest',
-      conflict: 'Conflict',
-      natural: 'Natural',
-      military: 'Military',
-    };
-
     g.selectAll('.lane-label')
-      .data(LANES)
+      .data(this.lanes)
       .join('text')
       .attr('x', -10)
       .attr('y', (d) => (yScale(d) ?? 0) + yScale.bandwidth() / 2)
       .attr('text-anchor', 'end')
       .attr('dominant-baseline', 'central')
-      .attr('fill', (d: TimelineEvent['lane']) => LANE_COLORS[d])
+      .attr('fill', (d: TimelineLane) => LANE_COLORS[d])
       .attr('font-size', '11px')
       .attr('font-weight', '500')
-      .text((d: TimelineEvent['lane']) => laneLabels[d] || d);
+      .text((d: TimelineLane) => t(`components.countryTimeline.lanes.${d}`) || d);
   }
 
   private drawNowMarker(
@@ -207,7 +207,7 @@ export class CountryTimeline {
     innerW: number,
   ): void {
     const populatedLanes = new Set(events.map((e) => e.lane));
-    const emptyLanes = LANES.filter((l) => !populatedLanes.has(l));
+    const emptyLanes = this.lanes.filter((l) => !populatedLanes.has(l));
 
     g.selectAll('.empty-label')
       .data(emptyLanes)

@@ -545,7 +545,8 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     const flag = this.el('span', 'cdp-flag', CountryDeepDivePanel.toFlagEmoji(code));
     const titleWrap = this.el('div', 'cdp-title-wrap');
     const name = this.el('h2', 'cdp-country-name', country);
-    const subtitle = this.el('div', 'cdp-country-subtitle', `${code.toUpperCase()} • Country Intelligence`);
+    const subtitleText = SITE_VARIANT === 'ai' ? `${code.toUpperCase()} • AI Intelligence Profile` : `${code.toUpperCase()} • Country Intelligence`;
+    const subtitle = this.el('div', 'cdp-country-subtitle', subtitleText);
     titleWrap.append(name, subtitle);
     left.append(flag, titleWrap);
 
@@ -599,6 +600,9 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     const updated = this.el('span', 'cdp-updated', `Updated ${this.shortDate(score?.lastUpdated ?? new Date())}`);
     top.append(label, updated);
     scoreCard.append(top);
+    if (SITE_VARIANT === 'ai') {
+      scoreCard.style.display = 'none';
+    }
 
     if (score) {
       const band = this.ciiBand(score.score);
@@ -656,30 +660,42 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     this.signalsBody.replaceChildren();
 
     const chips = this.el('div', 'cdp-signal-chips');
-    this.addSignalChip(chips, signals.criticalNews, t('countryBrief.chips.criticalNews'), '🚨', 'conflict');
-    this.addSignalChip(chips, signals.protests, t('countryBrief.chips.protests'), '📢', 'protest');
-    this.addSignalChip(chips, signals.militaryFlights, t('countryBrief.chips.militaryAir'), '✈️', 'military');
-    this.addSignalChip(chips, signals.militaryVessels, t('countryBrief.chips.navalVessels'), '⚓', 'military');
+    const isAi = SITE_VARIANT === 'ai';
+
+    if (!isAi) {
+      this.addSignalChip(chips, signals.criticalNews, t('countryBrief.chips.criticalNews'), '🚨', 'conflict');
+      this.addSignalChip(chips, signals.protests, t('countryBrief.chips.protests'), '📢', 'protest');
+      this.addSignalChip(chips, signals.militaryFlights, t('countryBrief.chips.militaryAir'), '✈️', 'military');
+      this.addSignalChip(chips, signals.militaryVessels, t('countryBrief.chips.navalVessels'), '⚓', 'military');
+    }
+
     this.addSignalChip(chips, signals.outages, t('countryBrief.chips.outages'), '🌐', 'outage');
     this.addSignalChip(chips, signals.aisDisruptions, t('countryBrief.chips.aisDisruptions'), '🚢', 'outage');
-    this.addSignalChip(chips, signals.satelliteFires, t('countryBrief.chips.satelliteFires'), '🔥', 'climate');
+
+    if (!isAi) {
+      this.addSignalChip(chips, signals.satelliteFires, t('countryBrief.chips.satelliteFires'), '🔥', 'climate');
+    }
+
     this.addSignalChip(chips, signals.temporalAnomalies, t('countryBrief.chips.temporalAnomalies'), '⏱️', 'outage');
     this.addSignalChip(chips, signals.cyberThreats, t('countryBrief.chips.cyberThreats'), '🛡️', 'conflict');
-    this.addSignalChip(chips, signals.earthquakes, t('countryBrief.chips.earthquakes'), '🌍', 'quake');
-    if (signals.displacementOutflow > 0) {
-      const fmt = signals.displacementOutflow >= 1_000_000
-        ? `${(signals.displacementOutflow / 1_000_000).toFixed(1)}M`
-        : `${(signals.displacementOutflow / 1000).toFixed(0)}K`;
-      chips.append(this.makeSignalChip(`🌊 ${fmt} ${t('countryBrief.chips.displaced')}`, 'displacement'));
-    }
-    this.addSignalChip(chips, signals.climateStress, t('countryBrief.chips.climateStress'), '🌡️', 'climate');
-    this.addSignalChip(chips, signals.conflictEvents, t('countryBrief.chips.conflictEvents'), '⚔️', 'conflict');
-    this.addSignalChip(chips, signals.activeStrikes, t('countryBrief.chips.activeStrikes'), '💥', 'conflict');
-    if (signals.travelAdvisories > 0 && signals.travelAdvisoryMaxLevel) {
-      const advLabel = signals.travelAdvisoryMaxLevel === 'do-not-travel' ? t('countryBrief.chips.doNotTravel')
-        : signals.travelAdvisoryMaxLevel === 'reconsider' ? t('countryBrief.chips.reconsiderTravel')
-        : t('countryBrief.chips.exerciseCaution');
-      chips.append(this.makeSignalChip(`⚠️ ${signals.travelAdvisories} ${t('countryBrief.chips.advisory')}: ${advLabel}`, 'advisory'));
+
+    if (!isAi) {
+      this.addSignalChip(chips, signals.earthquakes, t('countryBrief.chips.earthquakes'), '🌍', 'quake');
+      if (signals.displacementOutflow > 0) {
+        const fmt = signals.displacementOutflow >= 1_000_000
+          ? `${(signals.displacementOutflow / 1_000_000).toFixed(1)}M`
+          : `${(signals.displacementOutflow / 1000).toFixed(0)}K`;
+        chips.append(this.makeSignalChip(`🌊 ${fmt} ${t('countryBrief.chips.displaced')}`, 'displacement'));
+      }
+      this.addSignalChip(chips, signals.climateStress, t('countryBrief.chips.climateStress'), '🌡️', 'climate');
+      this.addSignalChip(chips, signals.conflictEvents, t('countryBrief.chips.conflictEvents'), '⚔️', 'conflict');
+      this.addSignalChip(chips, signals.activeStrikes, t('countryBrief.chips.activeStrikes'), '💥', 'conflict');
+      if (signals.travelAdvisories > 0 && signals.travelAdvisoryMaxLevel) {
+        const advLabel = signals.travelAdvisoryMaxLevel === 'do-not-travel' ? t('countryBrief.chips.doNotTravel')
+          : signals.travelAdvisoryMaxLevel === 'reconsider' ? t('countryBrief.chips.reconsiderTravel')
+          : t('countryBrief.chips.exerciseCaution');
+        chips.append(this.makeSignalChip(`⚠️ ${signals.travelAdvisories} ${t('countryBrief.chips.advisory')}: ${advLabel}`, 'advisory'));
+      }
     }
     this.addSignalChip(chips, signals.orefSirens, t('countryBrief.chips.activeSirens'), '🚨', 'conflict');
     this.addSignalChip(chips, signals.orefHistory24h, t('countryBrief.chips.sirens24h'), '🕓', 'conflict');
@@ -691,7 +707,13 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     this.signalRecentBody = this.el('div', 'cdp-signal-recent');
     this.signalsBody.append(this.signalBreakdownBody, this.signalRecentBody);
 
-    const seeded: CountryDeepDiveSignalDetails = {
+    const seeded: CountryDeepDiveSignalDetails = isAi ? {
+      critical: signals.outages > 0 ? 1 : 0,
+      high: signals.cyberThreats,
+      medium: signals.temporalAnomalies,
+      low: signals.aisDisruptions,
+      recentHigh: [],
+    } : {
       critical: signals.criticalNews + Math.max(0, signals.activeStrikes),
       high: signals.militaryFlights + signals.militaryVessels + signals.protests,
       medium: signals.outages + signals.cyberThreats + signals.aisDisruptions,
@@ -839,7 +861,8 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
 
     const panel = this.el('aside', 'country-deep-dive');
     panel.id = 'country-deep-dive-panel';
-    panel.setAttribute('aria-label', 'Country Intelligence');
+    const label = SITE_VARIANT === 'ai' ? 'AI Intelligence Profile' : 'Country Intelligence';
+    panel.setAttribute('aria-label', label);
     panel.setAttribute('aria-hidden', 'true');
 
     const shell = this.el('div', 'country-deep-dive-shell');
