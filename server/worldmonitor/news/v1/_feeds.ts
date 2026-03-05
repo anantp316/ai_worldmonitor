@@ -274,6 +274,61 @@ export const VARIANT_FEEDS: Record<string, Record<string, ServerFeed[]>> = {
       { name: 'Singularity Hub', url: 'https://singularityhub.com/feed/' },
     ],
   },
+
+  ai: {
+    ai_general: [
+      { name: 'AI News', url: gn('artificial+intelligence+news+when:2d') },
+      { name: 'VentureBeat AI', url: 'https://venturebeat.com/category/ai/feed/' },
+      { name: 'The Verge AI', url: 'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml' },
+      { name: 'MIT Tech Review AI', url: 'https://www.technologyreview.com/topic/artificial-intelligence/feed' },
+      { name: 'Fortune AI', url: 'https://fortune.com/category/technology/ai/feed/' },
+      { name: 'ZDNet AI', url: 'https://www.zdnet.com/topic/artificial-intelligence/rss.xml' },
+    ],
+    genai: [
+      { name: 'OpenAI Blog', url: 'https://openai.com/news/rss.xml' },
+      { name: 'Anthropic News', url: gn('Anthropic+Claude+AI+when:7d') },
+      { name: 'Google AI Blog', url: 'https://blog.google/technology/ai/rss/' },
+      { name: 'Meta AI News', url: 'https://ai.meta.com/blog/rss/' },
+      { name: 'Hugging Face Blog', url: 'https://huggingface.co/blog/feed.xml' },
+      { name: 'GenAI Trends', url: gn('"generative AI" OR LLM OR ChatGPT OR Claude OR Gemini when:2d') },
+    ],
+    agentic: [
+      { name: 'Agentic AI News', url: gn('"agentic AI" OR "AI agents" OR "autonomous agents" when:7d') },
+      { name: 'AutoGPT/Agents', url: gn('"AutoGPT" OR "BabyAGI" OR "LangChain" agents when:7d') },
+    ],
+    ai_medical: [
+      { name: 'Medical AI News', url: gn('"AI in medicine" OR "healthcare AI" OR "AI diagnostics" when:7d') },
+      { name: 'Nature Medicine AI', url: 'https://www.nature.com/nm/rss/current' },
+    ],
+    ai_research: [
+      { name: 'ArXiv AI (cs.AI)', url: 'https://export.arxiv.org/rss/cs.AI' },
+      { name: 'ArXiv ML (cs.LG)', url: 'https://export.arxiv.org/rss/cs.LG' },
+      { name: 'MIT Research', url: 'https://news.mit.edu/rss/research' },
+      { name: 'Stanford HAI', url: gn('site:hai.stanford.edu when:14d') },
+    ],
+    ai_war: [
+      { name: 'AI Defense News', url: gn('"AI in warfare" OR "lethal autonomous weapons" OR "AI defense" when:7d') },
+      { name: 'Defense One AI', url: 'https://www.defenseone.com/rss/all/' },
+      { name: 'Palantir News', url: gn('Palantir AIP OR Anduril AI when:14d') },
+    ],
+    podcasts_tutorials: [
+      { name: 'Andrej Karpathy', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UC7neMWGV4CF_p3F0LpLj4Sg' },
+      { name: 'AI Explained', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCN79vJq_VCO_P_O86S3KzSg' },
+      { name: 'Yannic Kilcher', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCZHm_O-KxNO6BgN6G_fV0Xg' },
+      { name: 'Wes Roth', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UC8wZnXYK_CGKlBcZp-GxYPA' },
+      { name: 'Two Minute Papers', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCbfYPyITQ-7l4upoX8nvctg' },
+      { name: 'Matt Wolfe', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UC9uUfAsmH6G7sM-7S6vIAtw' },
+      { name: 'The Rundown AI', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCG5m9G8G3Pz6u7v_1_H9iKg' },
+      { name: 'Matthew Berman', url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UC_sfvGnxVb0ZJgndnsh4Irg' },
+    ],
+    regulation: [
+      { name: 'AI Regulation', url: gn('AI regulation OR "artificial intelligence" law OR policy when:7d') },
+      { name: 'EU AI Act', url: gn('"EU+AI+Act" OR "Artificial Intelligence Act" when:7d') },
+      { name: 'US AI Policy', url: gn('"US+AI+policy" OR "Executive Order on AI" when:14d') },
+      { name: 'China AI Regulation', url: gn('"China AI regulation" OR "CAC AI" when:14d') },
+      { name: 'UN AI Governance', url: gn('"UN AI governance" OR "UN AI Advisory Body" when:30d') },
+    ],
+  },
 };
 
 export const INTEL_SOURCES: ServerFeed[] = [

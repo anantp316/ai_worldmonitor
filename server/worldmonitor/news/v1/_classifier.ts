@@ -211,7 +211,7 @@ export function classifyByKeyword(title: string, variant?: string): Classificati
     return { level: 'info', category: 'general', confidence: 0.3, source: 'keyword' };
   }
 
-  const isTech = variant === 'tech';
+  const isTech = variant === 'tech' || variant === 'ai';
 
   let match = matchKeywords(lower, CRITICAL_KEYWORDS);
   if (match) return { level: 'critical', category: match.category, confidence: 0.9, source: 'keyword' };

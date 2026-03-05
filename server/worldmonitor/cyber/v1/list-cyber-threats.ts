@@ -29,7 +29,6 @@ import {
 type CachedThreats = Pick<ListCyberThreatsResponse, 'threats'>;
 
 const REDIS_CACHE_KEY = 'cyber:threats:v2';
-const BOOTSTRAP_KEY = 'cyber:threats-bootstrap:v2';
 const REDIS_CACHE_TTL = 7200; // 2 hr — IOC feeds update at most daily
 const MAX_CACHED_THREATS = 2000; // cap cached set to avoid oversized Redis values
 

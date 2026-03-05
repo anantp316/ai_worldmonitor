@@ -561,9 +561,8 @@ export class DataLoaderManager implements AppModule {
   }
 
   private async loadNewsCategory(category: string, feeds: typeof FEEDS.politics, digest?: ListFeedDigestResponse | null): Promise<NewsItem[]> {
+    const panel = this.ctx.newsPanels[category];
     try {
-      const panel = this.ctx.newsPanels[category];
-
       const enabledFeeds = (feeds ?? []).filter(f => !this.ctx.disabledSources.has(f.name));
       if (enabledFeeds.length === 0) {
         delete this.ctx.newsByCategory[category];
@@ -721,6 +720,7 @@ export class DataLoaderManager implements AppModule {
 
       return items;
     } catch (error) {
+      if (panel) panel.showError(String(error));
       this.ctx.statusPanel?.updateFeed(category.charAt(0).toUpperCase() + category.slice(1), {
         status: 'error',
         errorMessage: String(error),
@@ -871,9 +871,9 @@ export class DataLoaderManager implements AppModule {
         ? await clusterNewsHybrid(this.ctx.allNews)
         : await analysisWorker.clusterNews(this.ctx.allNews);
 
-      if (this.ctx.latestClusters.length > 0) {
-        const insightsPanel = this.ctx.panels['insights'] as InsightsPanel | undefined;
-        insightsPanel?.updateInsights(this.ctx.latestClusters);
+      const insightsPanel = this.ctx.panels['insights'] as InsightsPanel | undefined;
+      if (insightsPanel) {
+        void insightsPanel.updateInsights(this.ctx.latestClusters);
       }
 
       const geoLocated = this.ctx.latestClusters

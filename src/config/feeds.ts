@@ -1108,6 +1108,13 @@ const AI_FEEDS: Record<string, Feed[]> = {
     { name: 'The Rundown AI', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UCG5m9G8G3Pz6u7v_1_H9iKg') },
     { name: 'Matthew Berman', url: rss('https://www.youtube.com/feeds/videos.xml?channel_id=UC_sfvGnxVb0ZJgndnsh4Irg') },
   ],
+  regulation: [
+    { name: 'AI Regulation', url: rss('https://news.google.com/rss/search?q=AI+regulation+OR+"artificial+intelligence"+law+OR+policy+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'EU AI Act', url: rss('https://news.google.com/rss/search?q="EU+AI+Act"+OR+"Artificial+Intelligence+Act"+when:7d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'US AI Policy', url: rss('https://news.google.com/rss/search?q="US+AI+policy"+OR+"Executive+Order+on+AI"+when:14d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'China AI Regulation', url: rss('https://news.google.com/rss/search?q="China+AI+regulation"+OR+"CAC+AI"+when:14d&hl=en-US&gl=US&ceid=US:en') },
+    { name: 'UN AI Governance', url: rss('https://news.google.com/rss/search?q="UN+AI+governance"+OR+"UN+AI+Advisory+Body"+when:30d&hl=en-US&gl=US&ceid=US:en') },
+  ],
 };
 
 // Variant-aware exports
@@ -1219,6 +1226,14 @@ export const DEFAULT_ENABLED_SOURCES: Record<string, string[]> = {
   thinktanks: ['Foreign Policy', 'Atlantic Council', 'Foreign Affairs', 'CSIS', 'RAND', 'Brookings', 'Carnegie', 'War on the Rocks'],
   crisis: ['CrisisWatch', 'IAEA', 'WHO', 'UNHCR'],
   energy: ['Oil & Gas', 'Nuclear Energy', 'Reuters Energy', 'Mining & Resources'],
+  ai_general: ['AI News', 'VentureBeat AI', 'The Verge AI', 'MIT Tech Review AI', 'Fortune AI'],
+  genai: ['OpenAI Blog', 'Anthropic News', 'Google AI Blog', 'Meta AI News', 'Hugging Face Blog'],
+  agentic: ['Agentic AI News', 'AutoGPT/Agents'],
+  ai_medical: ['Medical AI News', 'Nature Medicine AI'],
+  ai_research: ['ArXiv AI (cs.AI)', 'ArXiv ML (cs.LG)', 'MIT Research', 'Stanford HAI'],
+  ai_war: ['AI Defense News', 'Defense One AI', 'Palantir News'],
+  podcasts_tutorials: ['Andrej Karpathy', 'AI Explained', 'Yannic Kilcher', 'Wes Roth', 'Two Minute Papers', 'Matt Wolfe', 'The Rundown AI', 'Matthew Berman'],
+  regulation: ['AI Regulation', 'EU AI Act', 'US AI Policy', 'China AI Regulation', 'UN AI Governance'],
 };
 
 export const DEFAULT_ENABLED_INTEL: string[] = [

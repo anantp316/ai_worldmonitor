@@ -87,6 +87,7 @@ export class App {
       localStorage.setItem('worldmonitor-variant', currentVariant);
       localStorage.removeItem(STORAGE_KEYS.mapLayers);
       localStorage.removeItem(STORAGE_KEYS.panels);
+      localStorage.removeItem(STORAGE_KEYS.disabledFeeds);
       localStorage.removeItem(PANEL_ORDER_KEY);
       localStorage.removeItem(PANEL_SPANS_KEY);
       mapLayers = { ...defaultLayers };

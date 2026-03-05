@@ -27,7 +27,7 @@ import { renderStoryToCanvas } from '@/services/story-renderer';
 import { openStoryModal } from '@/components/StoryModal';
 import { MarketServiceClient } from '@/generated/client/worldmonitor/market/v1/service_client';
 import { BETA_MODE } from '@/config/beta';
-import { MILITARY_BASES } from '@/config';
+import { MILITARY_BASES, SITE_VARIANT } from '@/config';
 import { mlWorker } from '@/services/ml-worker';
 import { isHeadlineMemoryEnabled } from '@/services/ai-flow-settings';
 import { t, getCurrentLanguage } from '@/services/i18n';
@@ -431,7 +431,7 @@ export class CountryIntelManager implements AppModule {
     const inCountry = (lat: number, lon: number) => hasGeoShape && this.isInCountry(lat, lon, code);
     const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
 
-    if (this.ctx.intelligenceCache.protests?.events) {
+    if (SITE_VARIANT !== 'ai' && this.ctx.intelligenceCache.protests?.events) {
       for (const e of this.ctx.intelligenceCache.protests.events) {
         if (e.country?.toLowerCase() === countryLower || inCountry(e.lat, e.lon)) {
           events.push({
@@ -457,7 +457,7 @@ export class CountryIntelManager implements AppModule {
       }
     }
 
-    if (this.ctx.intelligenceCache.military) {
+    if (SITE_VARIANT !== 'ai' && this.ctx.intelligenceCache.military) {
       for (const f of this.ctx.intelligenceCache.military.flights) {
         if (hasGeoShape ? this.isInCountry(f.lat, f.lon, code) : f.operatorCountry?.toUpperCase() === code) {
           events.push({
@@ -481,7 +481,7 @@ export class CountryIntelManager implements AppModule {
     }
 
     const ciiData = getCountryData(code);
-    if (ciiData?.conflicts) {
+    if (SITE_VARIANT !== 'ai' && ciiData?.conflicts) {
       for (const c of ciiData.conflicts) {
         events.push({
           timestamp: new Date(c.time).getTime(),
@@ -492,15 +492,17 @@ export class CountryIntelManager implements AppModule {
       }
     }
 
-    for (const e of this.getCountryStrikes(code, hasGeoShape)) {
-      const rawTs = Number(e.timestamp) || 0;
-      const ts = rawTs < 1e12 ? rawTs * 1000 : rawTs;
-      events.push({
-        timestamp: ts,
-        lane: 'conflict',
-        label: e.title || `Strike: ${e.locationName}`,
-        severity: (e.severity.toLowerCase() === 'high' || e.severity.toLowerCase() === 'critical') ? 'critical' : 'high',
-      });
+    if (SITE_VARIANT !== 'ai') {
+      for (const e of this.getCountryStrikes(code, hasGeoShape)) {
+        const rawTs = Number(e.timestamp) || 0;
+        const ts = rawTs < 1e12 ? rawTs * 1000 : rawTs;
+        events.push({
+          timestamp: ts,
+          lane: 'conflict',
+          label: e.title || `Strike: ${e.locationName}`,
+          severity: (e.severity.toLowerCase() === 'high' || e.severity.toLowerCase() === 'critical') ? 'critical' : 'high',
+        });
+      }
     }
 
     this.ctx.countryTimeline = new CountryTimeline(mount);
@@ -587,7 +589,7 @@ export class CountryIntelManager implements AppModule {
 
     let orefSirens = 0;
     let orefHistory24h = 0;
-    if (code === 'IL' && this.ctx.intelligenceCache.orefAlerts) {
+    if (SITE_VARIANT !== 'ai' && code === 'IL' && this.ctx.intelligenceCache.orefAlerts) {
       orefSirens = this.ctx.intelligenceCache.orefAlerts.alertCount;
       orefHistory24h = this.ctx.intelligenceCache.orefAlerts.historyCount24h;
     }

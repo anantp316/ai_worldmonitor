@@ -81,6 +81,16 @@ const TECH_LIVE_CHANNELS: LiveChannel[] = [
   { id: 'nasa', name: 'Sen Space Live', handle: '@NASA', fallbackVideoId: 'aB1yRz0HhdY', useFallbackOnly: true },
 ];
 
+// AI variant: AI research, podcasts and tutorials
+const AI_LIVE_CHANNELS: LiveChannel[] = [
+  { id: 'karpathy', name: 'Andrej Karpathy', handle: '@AndrejKarpathy', fallbackVideoId: 'zduSFxRajkE' },
+  { id: '2min-papers', name: '2 Minute Papers', handle: '@TwoMinutePapers', fallbackVideoId: 'oM4VmoabDAI' },
+  { id: 'ai-explained', name: 'AI Explained', handle: '@AIExplained-official', fallbackVideoId: 'D-WfMnd8O_E' },
+  { id: 'wes-roth', name: 'Wes Roth', handle: '@WesRoth', fallbackVideoId: 'uY859I2Lq_o' },
+  { id: 'matt-wolfe', name: 'Matt Wolfe', handle: '@m_wolfe', fallbackVideoId: 'VAnC8_k_g_U' },
+  { id: 'bloomberg-tech', name: 'Bloomberg Technology', handle: '@Technology', fallbackVideoId: 'oM4VmoabDAI' },
+];
+
 // Optional channels users can add from the "Available Channels" tab UI
 // Includes default channels so they appear in the grid for toggle on/off
 export const OPTIONAL_LIVE_CHANNELS: LiveChannel[] = [
@@ -179,7 +189,11 @@ export const OPTIONAL_CHANNEL_REGIONS: { key: string; labelKey: string; channelI
   ..._REGION_ENTRIES,
 ];
 
-const DEFAULT_LIVE_CHANNELS = SITE_VARIANT === 'tech' ? TECH_LIVE_CHANNELS : SITE_VARIANT === 'happy' ? [] : FULL_LIVE_CHANNELS;
+const DEFAULT_LIVE_CHANNELS =
+  SITE_VARIANT === 'ai' ? AI_LIVE_CHANNELS :
+  SITE_VARIANT === 'tech' ? TECH_LIVE_CHANNELS :
+  SITE_VARIANT === 'happy' ? [] :
+  FULL_LIVE_CHANNELS;
 
 /** Default channel list for the current variant (for restore in channel management). */
 export function getDefaultLiveChannels(): LiveChannel[] {

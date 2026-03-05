@@ -9,6 +9,7 @@ import type { AssetType, NewsItem, RelatedAsset } from '@/types';
 import { sanitizeUrl, escapeHtml } from '@/utils/sanitize';
 import { getCSSColor } from '@/utils';
 import { PORTS } from '@/config/ports';
+import { SITE_VARIANT } from '@/config';
 import { haversineDistanceKm } from '@/services/related-assets';
 import type {
   CountryBriefPanel,
@@ -620,6 +621,12 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
     const [economicCard, economicBody] = this.sectionCard(t('countryBrief.economicIndicators'));
     const [marketsCard, marketsBody] = this.sectionCard(t('countryBrief.predictionMarkets'));
     const [briefCard, briefBody] = this.sectionCard(t('countryBrief.intelBrief'));
+
+    if (SITE_VARIANT === 'ai') {
+      militaryCard.style.display = 'none';
+      economicCard.style.display = 'none';
+      marketsCard.style.display = 'none';
+    }
 
     this.signalsBody = signalBody;
     this.timelineBody = timelineBody;

@@ -12,8 +12,6 @@ import { YAHOO_ONLY_SYMBOLS, fetchFinnhubQuote, fetchYahooQuotesBatch, parseStri
 import { cachedFetchJson } from '../../../_shared/redis';
 
 const REDIS_CACHE_KEY = 'market:quotes:v1';
-const MARKET_STOCKS_BOOTSTRAP_KEY = 'market:quotes-bootstrap:v1';
-const MARKET_COMMODITIES_BOOTSTRAP_KEY = 'market:commodities-bootstrap:v1';
 const REDIS_CACHE_TTL = 480; // 8 min — shared across all Vercel instances
 
 const quotesCache = new Map<string, { data: ListMarketQuotesResponse; timestamp: number }>();
